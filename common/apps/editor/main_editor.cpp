@@ -37,11 +37,14 @@
 #include <tuw_shmfw/vector.hpp>
 #include <tuw_shmfw/handler_variable.hpp>
 #include <tuw_shmfw/handler_vector.hpp>
-#include <ncurses.h>
 
 #include <boost/program_options.hpp>
-#include <boost/thread.hpp>    
+#include <boost/thread.hpp>
 #include <boost/algorithm/string.hpp>
+
+// ncurses.h must come after the boost headers: it #defines timeout(n) as a
+// macro, which clashes with the `timeout` member of boost::atomics::wait_result.
+#include <ncurses.h>
 
 size_t counter;
 size_t activeParameter;

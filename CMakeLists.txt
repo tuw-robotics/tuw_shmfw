@@ -1,4 +1,9 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.10)
+
+if(POLICY CMP0167)
+  cmake_policy(SET CMP0167 NEW)
+endif()
+
 project(TUWShmFw)
 set(TUWSHMFW_MAJOR_VERSION 0)
 set(TUWSHMFW_MINOR_VERSION 1)
@@ -6,10 +11,9 @@ set(TUWSHMFW_PATCH_VERSION 0)
 set(TUWSHMFW_VERSION
   ${TUWSHMFW_MAJOR_VERSION}.${TUWSHMFW_MINOR_VERSION}.${TUWSHMFW_PATCH_VERSION})
 
-#set(CMAKE_C_COMPILER /usr/bin/gcc-12)
-#set(CMAKE_CXX_COMPILER /usr/bin/g++-12)
-#set(CMAKE_CXX_STANDARD 20)
-#set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Offer the user the choice of overriding the installation directories
 set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
@@ -34,7 +38,6 @@ endforeach()
 
 # set up include-directories
 set(PROJECT_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/common/include")
-include_directories(${PROJECT_INCLUDE_DIR})  # to find foo/config.h
 
 add_subdirectory(common)
 

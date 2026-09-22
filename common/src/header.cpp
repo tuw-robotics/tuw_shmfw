@@ -105,10 +105,10 @@ Header::Header ( const std::string &name, HandlerPtr shmHdl, unsigned int header
         std::stringstream ss;
         bool locked = try_lock();
         ss << std::setw ( 20 ) << name() << ": " << header_shared->timestamp;
-        ss << " container: " << std::setw ( 10 ) << containerName();
-        ss << " locked: " << ( locked ? "NO" : "YES" );
-        ss << " hash: "<< std::setw ( 3 ) << header_shared->type_hash_code;
-        ss << " type: "<< std::setw ( 0x1F ) << std::string ( header_shared->type_name.c_str() );
+        ss << ", container: " << std::setw ( 10 ) << containerName();
+        ss << ", locked: " << ( locked ? "NO" : "YES" );
+        ss << ", hash: "<< std::setw ( 3 ) << header_shared->type_hash_code;
+        ss << ", type: "<< std::setw ( 0x1F ) << std::string ( header_shared->type_name.c_str() );
         if ( locked ) unlock();
         return ss.str();
     }
@@ -247,7 +247,6 @@ Header::Header ( const std::string &name, HandlerPtr shmHdl, unsigned int header
                 ScopedLock myLock ( header_shared->mutex );
                 header_shared->timestamp = now();
                 header_local.timestamp = header_shared->timestamp;
-                header_shared->condition_mutex.unlock();
                 header_shared->condition.notify_all();
                 updateTimestamps();
                 setType ( type_name, type_hash );
