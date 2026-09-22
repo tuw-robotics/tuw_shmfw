@@ -3,6 +3,11 @@
 A very small C++ library for creating shared memory variables that let a
 running program's internal state be inspected and changed from the outside, without stopping or recompiling it.
 
+It can be used instead of ROS 2 parameters to modify variables at runtime,
+but with precautions: unlike parameters, shared memory segments have no
+access control, no automatic cleanup if a process crashes without releasing
+the segment, and no discovery/introspection through standard ROS tooling.
+
 Wrap a variable or `std::vector` in a `ShmFw::Var<T>` / `ShmFw::Vector<T>`, and it becomes visible in a shared memory segment under a name of your choosing. Any other process — including the bundled `shmfw_admin` and `shmfw_editor` tools — can then list, read, and modify that value at runtime.
 
 ## Features
@@ -19,35 +24,17 @@ Wrap a variable or `std::vector` in a `ShmFw::Var<T>` / `ShmFw::Vector<T>`, and 
 - `std::chrono::system_clock::time_point` supported directly as a variable
   type
 
-## Requirements
-
-- CMake >= 3.10
-- A C++17 compiler
-- Boost (`date_time`, `thread`, `program_options`)
-- ncurses (only needed for `shmfw_editor`)
-
-On Ubuntu, install everything needed with:
-
-```bash
-sudo apt install build-essential cmake libboost-date-time-dev libboost-thread-dev libboost-program-options-dev libncurses-dev
-```
-
-## Building
-
-```bash
-mkdir build && cd build
-cmake ..
-make
-```
-
-This builds the `tuw_shmfw` library, the `shmfw_admin` and `shmfw_editor`
-apps, and the example programs.
+This is a [ROS 2](https://docs.ros.org/) package built with `ament_cmake`. It
+has no dependency on ROS message/service types or `rclcpp` — the shared
+memory library itself is plain C++ — but it's built and installed with
+`colcon`/`ament_cmake` so it can live in a ROS 2 workspace, be resolved by
+`rosdep`, and its tools can be launched with `ros2 run`.
 
 ## Usage
 
 ### Writing a shared variable
 
-See [`common/examples/usage_var.cpp`](common/examples/usage_var.cpp):
+See [`examples/usage_var.cpp`](examples/usage_var.cpp):
 
 ```cpp
 #include <tuw_shmfw/variable.hpp>
@@ -62,7 +49,7 @@ std::cout << a << std::endl;
 
 ### Writing a shared vector
 
-See [`common/examples/usage_vector.cpp`](common/examples/usage_vector.cpp):
+See [`examples/usage_vector.cpp`](examples/usage_vector.cpp):
 
 ```cpp
 #include <tuw_shmfw/vector.hpp>
@@ -74,13 +61,14 @@ a.clear();
 a->push_back(1.23);
 ```
 
-Run the examples with `shmfw_usage_var` / `shmfw_usage_vector` (built to
-`build/common/examples/`).
+Run the examples with `ros2 run tuw_shmfw shmfw_usage_var` /
+`ros2 run tuw_shmfw shmfw_usage_vector` (or call the installed binaries in
+`install/tuw_shmfw/lib/tuw_shmfw/` directly).
 
 ### Inspecting a segment: shmfw_admin
 
 ```bash
-shmfw_admin -m shared_memory_name --context --type --timestamp
+ros2 run tuw_shmfw shmfw_admin -m shared_memory_name --context --type --timestamp
 ```
 
 Lists every variable in the segment along with its lock state and, with the
@@ -90,7 +78,7 @@ remove the segment entirely.
 ### Editing variables live: shmfw_editor
 
 ```bash
-shmfw_editor -m shared_memory_name
+ros2 run tuw_shmfw shmfw_editor -m shared_memory_name
 ```
 
 Opens an ncurses view of the segment's variables (or a specific subset given
@@ -98,17 +86,7 @@ via `-n`). Navigate with the arrow keys, press `Enter` to edit a value, `l`/`r`
 to lock/unlock, `t` to trigger a change notification, and `h` for the full key
 list.
 
-## Project layout
-
-```
-common/
-├── include/tuw_shmfw/   # public headers (Var, Vector, Handler, Header, ...)
-├── src/                 # library implementation
-├── apps/
-│   ├── admin/           # shmfw_admin CLI
-│   └── editor/          # shmfw_editor ncurses TUI
-└── examples/            # shmfw_usage_var, shmfw_usage_vector, ...
-```
+<img src="res/shmfw_editor00.jpg" width="300"> <img src="res/shmfw_editor01.jpg" height="300">
 
 ## License
 

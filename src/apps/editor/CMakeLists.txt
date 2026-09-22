@@ -7,7 +7,5 @@ target_link_libraries(shmfw_editor PRIVATE tuw_shmfw ${CURSES_LIBRARIES})
 
 
 install(TARGETS shmfw_editor
-  # IMPORTANT: Add the executables to the "export-set"
-  EXPORT TUWShmFwTargets
-  RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin)
+  RUNTIME DESTINATION "lib/${PROJECT_NAME}")
   
