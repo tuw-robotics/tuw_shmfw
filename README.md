@@ -1,13 +1,9 @@
 # tuw_shmfw
 
 A very small C++ library for creating shared memory variables that let a
-running program's internal state be inspected and changed from the outside,
-without stopping or recompiling it.
+running program's internal state be inspected and changed from the outside, without stopping or recompiling it.
 
-Wrap a variable or `std::vector` in a `ShmFw::Var<T>` / `ShmFw::Vector<T>`,
-and it becomes visible in a shared memory segment under a name of your
-choosing. Any other process — including the bundled `shmfw_admin` and
-`shmfw_editor` tools — can then list, read, and modify that value at runtime.
+Wrap a variable or `std::vector` in a `ShmFw::Var<T>` / `ShmFw::Vector<T>`, and it becomes visible in a shared memory segment under a name of your choosing. Any other process — including the bundled `shmfw_admin` and `shmfw_editor` tools — can then list, read, and modify that value at runtime.
 
 ## Features
 
@@ -29,6 +25,12 @@ choosing. Any other process — including the bundled `shmfw_admin` and
 - A C++17 compiler
 - Boost (`date_time`, `thread`, `program_options`)
 - ncurses (only needed for `shmfw_editor`)
+
+On Ubuntu, install everything needed with:
+
+```bash
+sudo apt install build-essential cmake libboost-date-time-dev libboost-thread-dev libboost-program-options-dev libncurses-dev
+```
 
 ## Building
 
