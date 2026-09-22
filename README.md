@@ -32,7 +32,7 @@ memory library itself is plain C++ — but it's built and installed with
 
 ## Usage
 
-### Writing a shared variable
+### Using a shared variable
 
 See [`examples/usage_var.cpp`](examples/usage_var.cpp):
 
@@ -47,7 +47,7 @@ std::cout << a << std::endl;
 *a.get() = 1.2;
 ```
 
-### Writing a shared vector
+### Using a shared vector
 
 See [`examples/usage_vector.cpp`](examples/usage_vector.cpp):
 
@@ -86,7 +86,7 @@ via `-n`). Navigate with the arrow keys, press `Enter` to edit a value, `l`/`r`
 to lock/unlock, `t` to trigger a change notification, and `h` for the full key
 list.
 
-<img src="res/shmfw_editor00.jpg" width="300"> <img src="res/shmfw_editor01.jpg" height="300">
+<img src="res/shmfw_editor00.jpg" width="300"> <img src="res/shmfw_editor01.jpg" width="300">
 
 ## License
 
